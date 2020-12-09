@@ -1,0 +1,31 @@
+{
+  "name": "test",
+  "version": "1.0.0",
+  "description": "nothing ",
+  "main": "server.js",
+  "dependencies": {
+    "express": "^4.17.1",
+    "mkdirp": "^1.0.4",
+    "mysql": "^2.18.1",
+    "ps-node": "^0.1.6",
+    "puppeteer": "^5.5.0"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "nothing",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kichiro09/crawl_project.git"
+  },
+  "keywords": [
+    "nothing"
+  ],
+  "author": "kichiro09",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/kichiro09/crawl_project/issues"
+  },
+  "homepage": "https://github.com/kichiro09/crawl_project#readme"
+}
