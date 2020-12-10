@@ -66,13 +66,13 @@ app.get('/get_story_detail', function (req, res) {
    var id = req.query.story_id;
    if (typeof id !== 'undefined') {
 	   var sql = "select * from story_detail where story_id="+id;
-	   if (conn === null) {
+	   	if (typeof conn === 'undefined') {
 	   	conn = mysql.createConnection(db_cofig);
 	   	conn.connect(err => {
 	   		if (err) throw err;
 	   	});
 	   	console.log('connected');
-   		}
+   	}
 	   conn.query(sql, function(err, ret) {
 	   		if (err) throw err;
 	   		if (typeof ret[0] !== 'undefined') {
@@ -92,13 +92,13 @@ app.get('/get_chapter', function (req, res) {
 	var story_id = req.query.story_id;
 	if (typeof story_id !== 'undefined') {
 		var sql = "select distinct chap_name from chapter_content where story_id =" + story_id;
-		if (conn === null) {
+			if (typeof conn === 'undefined') {
 	   	conn = mysql.createConnection(db_cofig);
 	   	conn.connect(err => {
 	   		if (err) throw err;
 	   	});
 	   	console.log('connected');
-   		}
+   	}
 		conn.query(sql, function(err, ret) {
 			if (err) throw err;
 			if (typeof ret[0] !== 'undefined') {
@@ -123,13 +123,13 @@ app.get('/get_chapter_images', function(req, res) {
 	var story_id = req.query.story_id;
 	if (typeof chap !== 'undefined' && typeof story_id !== 'undefined') {
 		var sql = "select image_path from chapter_content where story_id =" +story_id+" and chap_name = 'chap-"+chap+"';";
-		if (conn === null) {
+			if (typeof conn === 'undefined') {
 	   	conn = mysql.createConnection(db_cofig);
 	   	conn.connect(err => {
 	   		if (err) throw err;
 	   	});
 	   	console.log('connected');
-   		}
+   	}
 		conn.query(sql, function(err, ret) {
 			if (err) throw err;
 			if (typeof ret[0] !== 'undefined') {
