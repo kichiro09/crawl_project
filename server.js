@@ -7,10 +7,10 @@ var express = require('express');
 var app = express();
 var mysql = require('mysql');
 var conn = mysql.createConnection({
-  database: 'test',
-  host: "localhost",
-  user: "root",
-  password: ""
+  database: 'heroku_5c8bd5fb6c59985',
+  host: "us-cdbr-east-02.cleardb.com",
+  user: "b612853c3fb74b",
+  password: "838ac40a"
 });
 conn.connect(function(err) {
 	if (err) throw err;
