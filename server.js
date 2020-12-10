@@ -1,21 +1,36 @@
 const StoryDB = require("./classes.js").StoryDB;
 const StoryDetailDB = require("./classes.js").StoryDetailDB; 
 const ChapterContent = require("./classes.js").ChapterContent;
+var db_cofig = {
+  database: 'heroku_5c8bd5fb6c59985',
+  host: "us-cdbr-east-02.cleardb.com",
+  user: "b612853c3fb74b",
+  password: "838ac40a"
+};
+var conn;
 // import {StoryDetail} from "./classes.js";
 // import {StoryContent} from "./classes.js";
 var express = require('express');
 var app = express();
 var mysql = require('mysql');
-var conn = mysql.createConnection({
-  database: 'heroku_5c8bd5fb6c59985',
-  host: "us-cdbr-east-02.cleardb.com",
-  user: "b612853c3fb74b",
-  password: "838ac40a"
-});
-conn.connect(function(err) {
-	if (err) throw err;
-	console.log('connected');
-});
+function handleDisconnect() {
+	conn = mysql.createConnection(db_cofig);
+	conn.connect(function(err) {
+		if (err) {
+			console.log('error connect to db: ',err);
+		}
+		setTimeout(handleDisconnect, 2000);
+	});
+	conn.on('error', err => {
+		console.log('db error ', err);
+		if (err.code === 'PROTOCOL_CONNECTION_LOST') {
+			handleDisconnect();
+		} else {
+			throw err;
+		}
+	})
+}
+handleDisconnect();
 
 app.use(express.static('images'));
 

@@ -12,6 +12,7 @@
   },
   "devDependencies": {},
   "scripts": {
+    "test": "node --version",
     "start": "node server.js"
   },
   "repository": {
