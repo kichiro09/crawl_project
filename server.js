@@ -20,11 +20,11 @@ var conn = mysql.createPool(db_cofig);
 
 app.use(express.static('images'));
 
-app.get('/', function(req, res) {
+app.post('/', function(req, res) {
 	res.send('Hello World');
 });
 
-app.get('/get_all_story', function (req, res) {
+app.post('/get_all_story', function (req, res) {
    var sql = "select * from story";
    conn.query(sql, function(err, ret, fields) {
    		if (err) throw err;
@@ -40,7 +40,7 @@ app.get('/get_all_story', function (req, res) {
    });
 });
 
-app.get('/get_story_detail', function (req, res) {
+app.post('/get_story_detail', function (req, res) {
    var id = req.query.story_id;
    if (typeof id !== 'undefined') {
 	   var sql = "select * from story_detail where story_id="+id;
@@ -58,7 +58,7 @@ app.get('/get_story_detail', function (req, res) {
    }
 });
 
-app.get('/get_chapter', function (req, res) {
+app.post('/get_chapter', function (req, res) {
 	var story_id = req.query.story_id;
 	if (typeof story_id !== 'undefined') {
 		var sql = "select distinct chap_name from chapter_content where story_id =" + story_id;
@@ -80,7 +80,7 @@ app.get('/get_chapter', function (req, res) {
 
 });
 
-app.get('/get_chapter_images', function(req, res) {
+app.post('/get_chapter_images', function(req, res) {
 	var chap = req.query.chap;
 	var story_id = req.query.story_id;
 	if (typeof chap !== 'undefined' && typeof story_id !== 'undefined') {
