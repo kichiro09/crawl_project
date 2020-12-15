@@ -7,6 +7,12 @@ var db_cofig = {
   user: "b612853c3fb74b",
   password: "838ac40a"
 }
+// var db_cofig = {
+// 	database: 'test',
+// 	host: 'localhost',
+// 	user: 'root',
+// 	password: 'Kinglove09!'
+// }
 // import {StoryDetail} from "./classes.js";
 // import {StoryContent} from "./classes.js";
 var express = require('express');
@@ -33,7 +39,8 @@ app.post('/get_all_story', function (req, res) {
 	   		ret.forEach(e => {
 	   			objList.push(new StoryDB(e.id,e.avt,e.name,e.title,e.chap_count,e.updated,e.rate_count));
 	   		});
-	   		res.send(JSON.stringify(objList));
+	   		var strJSON = JSON.stringify(objList);
+	   		res.send(JSON.stringify({"data": objList}));
    		} else {
    			res.send('null');
    		}
