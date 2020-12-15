@@ -110,6 +110,25 @@ app.post('/get_chapter_images', function(req, res) {
 	}
 });
 
+app.post('/get_banner', function(req, res) {
+	var sql = 'select * from story order by rate_count desc limit 5;';
+	conn.query(sql, function(err, ret) {
+		if (err) throw err;
+		var objList = [];
+		ret.forEach(e => {
+			objList.push({
+				"name": e.name,
+				"avt": e.avt
+			});
+		});
+		res.send(JSON.stringify(objList));
+	});
+});
+
+app.post('/get_all_new_stories', function(req, res) {
+	
+})
+
 var server = app.listen(process.env.PORT || 3000, function() {
 	var host = server.address().address
 	var port = server.address().port
