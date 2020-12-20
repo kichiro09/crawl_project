@@ -27,7 +27,7 @@ var conn = mysql.createPool(db_cofig);
 app.use(express.static('images'));
 
 app.post('/', function(req, res) {
-	res.send('Hello World');
+	res.json({'data':'Hello World'});
 });
 
 app.post('/get_all_story', function (req, res) {
@@ -38,11 +38,10 @@ app.post('/get_all_story', function (req, res) {
 	   		var objList = [];
 	   		ret.forEach(e => {
 	   			objList.push(new StoryDB(e.id,e.avt,e.name,e.title,e.chap_count,e.updated,e.rate_count));
-	   		});
-	   		var strJSON = JSON.stringify(objList);
-	   		res.send(JSON.stringify({"data": objList}));
+	   		});	   		
+	   		res.json(JSON.stringify(objList));
    		} else {
-   			res.send('null');
+   			res.json({'data':'null'});
    		}
    });
 });
@@ -55,13 +54,13 @@ app.post('/get_story_detail', function (req, res) {
 	   		if (err) throw err;
 	   		if (typeof ret[0] !== 'undefined') {
 		   		var storyDetail = new StoryDetailDB(ret[0].story_id,ret[0].dif_name,ret[0].author,ret[0].sub_team,ret[0].status,ret[0].created,ret[0].view,ret[0].category);
-		   		res.send(JSON.stringify(storyDetail));
+		   		res.json(JSON.stringify(storyDetail));
 	   		} else {
-	   			res.send('null');
+	   			res.json({'data':'null'});
 	   		}
 	   });
    } else {
-   		res.send('invalid param');
+   		res.json({'data':'null'});
    }
 });
 
@@ -76,13 +75,13 @@ app.post('/get_chapter', function (req, res) {
 				ret.forEach(e => {
 					objList.push({'chap_name': e.chap_name});
 				});
-				res.send(JSON.stringify(objList));
+				res.json(JSON.stringify(objList));
 			} else {
-				res.send('null');
+				res.json({'data':'null'});
 			}
 		});
 	} else {
-		res.send('invalid param');
+		res.json({'data':'invalid param'});
 	}
 
 });
@@ -100,13 +99,13 @@ app.post('/get_chapter_images', function(req, res) {
 				ret.forEach(e => {
 					objList.push({"image_path" : e.image_path});
 				});
-				res.send(JSON.stringify(objList));
+				res.json(JSON.stringify(objList));
 			} else {
-				res.send('null');
+				res.json({'data':'null'});
 			}
 		});
 	} else {
-		res.send('invalid param');
+		res.json({'data':'invalid param'});
 	}
 });
 
@@ -121,7 +120,7 @@ app.post('/get_banner', function(req, res) {
 				"avt": e.avt
 			});
 		});
-		res.send(JSON.stringify(objList));
+		res.json(JSON.stringify(objList));
 	});
 });
 
