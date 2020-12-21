@@ -56,7 +56,11 @@ conn.query(createChapterContentSQL, function(err) {
 });				
 (async() => {
 	// {executablePath: pt}
+<<<<<<< HEAD
 	const browser = await puppeteer.launch({executablePath: pt});
+=======
+	const browser = await puppeteer.launch();
+>>>>>>> dd7842fe964b5e988bb51826e4c827854f94a63d
 	const page = await browser.newPage();
 	await page.setDefaultNavigationTimeout(0); 
 	await page.goto('https://www.ngonphong.com/');
@@ -112,6 +116,7 @@ conn.query(createChapterContentSQL, function(err) {
 			}
 			var sqlSelect = "select * from story where name ='"+name+"'";
 			console.log('sqlSelect: %s', sqlSelect);
+<<<<<<< HEAD
 			var storyID = 0;
 			await conn.query(sqlSelect,async function(err, ret, fields) {
 				if (err) {
@@ -132,6 +137,30 @@ conn.query(createChapterContentSQL, function(err) {
 					console.log('story %s exists', name);
 				}
 			});
+=======
+			var checkB = await conn.query(sqlSelect, function(err, ret, fields) {
+				if (err) {
+					console.log('select story failed %s', err);
+				}
+				if (typeof ret[0] !== 'undefined') return -1;
+				return 1;
+			});
+			console.log('checkb value ' + checkB);
+			var storyID = 0;
+			if (checkB) {
+				var sqlInsert = 'insert into story (avt, name, title, chap_count, updated, rate_count) values('
+							+"'/"+name+'_avt.jpg'+"','"+name+"','"+
+							t.title+"',"+t.chapCount.match(/[0-9]+/)+",'"+t.updated+"',"+t.rateCount
+							+');';
+				await conn.query(sqlInsert, function(err, ret, fields) {
+					if (err) throw err;
+					console.log('insert story done! '+ret.insertId);
+					storyID = ret.insertId;
+				});
+			} else {
+				console.log('story %s exists', name);
+			}
+>>>>>>> dd7842fe964b5e988bb51826e4c827854f94a63d
 			
 			console.log('get story done %s',storyID);
 			console.log('go to %s link',t.link);
@@ -153,6 +182,7 @@ conn.query(createChapterContentSQL, function(err) {
 				return storyDetail;
 			});
 			var checkInsertStoryDetail = 'select * from story_detail where story_id = ' + storyID;
+<<<<<<< HEAD
 			await conn.query(checkInsertStoryDetail,async function(err, ret) {
 				if (err) console('check story detail failed, %d\n%s', storyID, err);
 				if (ret.length === 0) {
@@ -165,6 +195,19 @@ conn.query(createChapterContentSQL, function(err) {
 				}
 			})
 			
+=======
+			var checkStoryDetailB = true;
+			await conn.query(checkInsertStoryDetail, function(err, ret) {
+				if (err) console('check story detail failed, %d\n%s', storyID, err);
+				if (typeof ret[0] !== 'undefined') checkStoryDetailB = false;
+			})
+			if (checkStoryDetailB) {
+				var insertStoryDetail = 'insert into story_detail values ('
+								+storyID+",'"+storyDetail.difName+"','"+storyDetail.author+"','"+storyDetail.subTeam+"','"+storyDetail.status+"','"+storyDetail.created+"','"+storyDetail.view+"','"+storyDetail.category+"');";
+				await conn.query(insertStoryDetail, err => {if (err) throw err;});
+				console.log('insert storyDetail done');
+			}
+>>>>>>> dd7842fe964b5e988bb51826e4c827854f94a63d
 			for (var chapI = 0; chapI < 5; chapI ++) {
 				var imgLink = storyDetail.chapList[chapI]
 				await page.goto(imgLink);
@@ -191,6 +234,7 @@ conn.query(createChapterContentSQL, function(err) {
 						await page.addScriptTag({path: "./classes.js", content: "text/javascript"});
 						var imagePath = chapName + imgI + ".jpg";
 						var selectChapContent = "select * from chapter_content where story_id=" + storyID +" and image_path='" + imagePath + "'";
+<<<<<<< HEAD
 						
 						await conn.query(selectChapContent,async function(err, ret) {
 							if (err) console('select chapter_content failed image_path: %s\n%s', imagePath, err);
@@ -204,6 +248,18 @@ conn.query(createChapterContentSQL, function(err) {
 							}
 						});
 						
+=======
+						var checkInsertChapContentB = true;
+						await conn.query(selectChapContent, function(err, ret) {
+							if (err) console('select chapter_content failed image_path: %s\n%s', imagePath, err);
+						});
+						if (checkInsertChapContentB) {
+							var insertChapContent = 'insert into chapter_content values('+"'"+chapName+"',"+storyID+",'"
+												+imagePath+".jpg');";
+							await conn.query(insertChapContent, err=> {if (err) throw err;});
+							console.log("inserted chap content");
+						}
+>>>>>>> dd7842fe964b5e988bb51826e4c827854f94a63d
 					}
 				}
 			}

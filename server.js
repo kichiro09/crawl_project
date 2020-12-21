@@ -7,6 +7,12 @@ var db_cofig = {
   user: "b612853c3fb74b",
   password: "838ac40a"
 }
+// var db_cofig = {
+// 	database: 'test',
+// 	host: 'localhost',
+// 	user: 'root',
+// 	password: 'Kinglove09!'
+// }
 // import {StoryDetail} from "./classes.js";
 // import {StoryContent} from "./classes.js";
 var express = require('express');
@@ -21,7 +27,7 @@ var conn = mysql.createPool(db_cofig);
 app.use(express.static('images'));
 
 app.post('/', function(req, res) {
-	res.send('Hello World');
+	res.json({'data':'Hello World'});
 });
 
 app.post('/get_all_story', function (req, res) {
@@ -32,10 +38,10 @@ app.post('/get_all_story', function (req, res) {
 	   		var objList = [];
 	   		ret.forEach(e => {
 	   			objList.push(new StoryDB(e.id,e.avt,e.name,e.title,e.chap_count,e.updated,e.rate_count));
-	   		});
-	   		res.send(JSON.stringify(objList));
+	   		});	   		
+	   		res.json(objList);
    		} else {
-   			res.send('null');
+   			res.json({'data':'null'});
    		}
    });
 });
@@ -48,13 +54,13 @@ app.post('/get_story_detail', function (req, res) {
 	   		if (err) throw err;
 	   		if (typeof ret[0] !== 'undefined') {
 		   		var storyDetail = new StoryDetailDB(ret[0].story_id,ret[0].dif_name,ret[0].author,ret[0].sub_team,ret[0].status,ret[0].created,ret[0].view,ret[0].category);
-		   		res.send(JSON.stringify(storyDetail));
+		   		res.json(storyDetail);
 	   		} else {
-	   			res.send('null');
+	   			res.json({'data':'null'});
 	   		}
 	   });
    } else {
-   		res.send('invalid param');
+   		res.json({'data':'null'});
    }
 });
 
@@ -69,13 +75,13 @@ app.post('/get_chapter', function (req, res) {
 				ret.forEach(e => {
 					objList.push({'chap_name': e.chap_name});
 				});
-				res.send(JSON.stringify(objList));
+				res.json(objList);
 			} else {
-				res.send('null');
+				res.json({'data':'null'});
 			}
 		});
 	} else {
-		res.send('invalid param');
+		res.json({'data':'invalid param'});
 	}
 
 });
@@ -93,15 +99,34 @@ app.post('/get_chapter_images', function(req, res) {
 				ret.forEach(e => {
 					objList.push({"image_path" : e.image_path});
 				});
-				res.send(JSON.stringify(objList));
+				res.json(objList);
 			} else {
-				res.send('null');
+				res.json({'data':'null'});
 			}
 		});
 	} else {
-		res.send('invalid param');
+		res.json({'data':'invalid param'});
 	}
 });
+
+app.post('/get_banner', function(req, res) {
+	var sql = 'select * from story order by rate_count desc limit 5;';
+	conn.query(sql, function(err, ret) {
+		if (err) throw err;
+		var objList = [];
+		ret.forEach(e => {
+			objList.push({
+				"name": e.name,
+				"avt": e.avt
+			});
+		});
+		res.json(objList);
+	});
+});
+
+app.post('/get_all_new_stories', function(req, res) {
+	
+})
 
 var server = app.listen(process.env.PORT || 3000, function() {
 	var host = server.address().address
